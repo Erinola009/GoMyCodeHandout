@@ -1,0 +1,129 @@
+QUESTION:- What You're Aiming For
+
+Implement a relational database schema based on the provided entities and their attributes.
+
+Customers
+CustomerID (Primary Key)
+FirstName
+LastName
+Email
+Phone
+Address
+City
+State
+ZipCode
+Products
+ProductID (Primary Key)
+ProductName
+Description
+Price
+StockQuantity
+CategoryID (Foreign Key)
+Categories
+CategoryID (Primary Key)
+CategoryName
+Description
+Orders
+OrderID (Primary Key)
+CustomerID (Foreign Key)
+OrderDate
+TotalAmount
+OrderDetails
+OrderDetailID (Primary Key)
+OrderID (Foreign Key)
+ProductID (Foreign Key)
+Quantity
+UnitPrice
+ 
+
+Relationships
+Customers - Orders: One-to-Many (One customer can place multiple orders)
+CustomerID in Orders references CustomerID in Customers.
+Products - OrderDetails: One-to-Many (One product can appear in multiple order details)
+ProductID in OrderDetails references ProductID in Products.
+Orders - OrderDetails: One-to-Many (One order can have multiple order details)
+OrderID in OrderDetails references OrderID in Orders.
+Categories - Products: One-to-Many (One category can include multiple products)
+CategoryID in Products references CategoryID in Categories.
+
+Instructions
+
+Based on the provided data types and constraints, implement the relational model using SQL.
+
+Note: ALL COLUMNS SHOULD HAVE THE 'NOT NULL' CONSTRAINT.
+
+
+
+
+
+
+ANSWER:------------
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY NOT NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Phone VARCHAR(15) NOT NULL,
+    Address VARCHAR(100) NOT NULL,
+    City VARCHAR(50) NOT NULL,
+    State VARCHAR(50) NOT NULL,
+    ZipCode VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY NOT NULL,
+    CategoryName VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL
+);
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY NOT NULL,
+    ProductName VARCHAR(100) NOT NULL,
+    Description TEXT NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    StockQuantity INT NOT NULL,
+    CategoryID INT NOT NULL,
+    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY NOT NULL,
+    CustomerID INT NOT NULL,
+    OrderDate DATETIME NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE OrderDetails (
+    OrderDetailID INT PRIMARY KEY NOT NULL,
+    OrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+
+
+
+### Explanation of the Schema:
+1. **Customers Table**:
+   - Stores customer information with `CustomerID` as the primary key.
+
+2. **Categories Table**:
+   - Stores product categories with `CategoryID` as the primary key.
+
+3. **Products Table**:
+   - Contains product details and includes a foreign key reference to `Categories`.
+
+4. **Orders Table**:
+   - Records customer orders with a foreign key reference to `Customers`.
+
+5. **OrderDetails Table**:
+   - Stores details for each order, including product and quantity, with foreign key references to both `Orders` and `Products`.
+
+### Data Types and Constraints:
+- All columns are defined with appropriate data types and set to `NOT NULL` to ensure data integrity.
+- Foreign key constraints are established to maintain referential integrity across related tables.
